@@ -8,7 +8,8 @@ Library             RPA.Desktop
 
 
 *** Variables ***
-${base_url}     http://localhost:8000
+${base_url}         http://localhost:8000
+${theme_name}       Boost
 
 
 *** Tasks ***
@@ -32,5 +33,9 @@ Log In
 
 Navigate to theme page and read HTML table
     Go To    ${base_url}/theme/index.php
-    ${selected_theme_row} =    Get Element Attribute    css:table.generaltable    outerHTML
-    Log To Console    ${selected_theme_row}
+    ${find_theme_name} =    Get Element Attribute    css:td.cell.c2.lastcol > h3    innerHTML
+    IF    "${find_theme_name}" == "${theme_name}"
+        Log To Console    ${find_theme_name}
+    ELSE
+        Log To Console    "Error, wrong theme,exiting..."
+    END
