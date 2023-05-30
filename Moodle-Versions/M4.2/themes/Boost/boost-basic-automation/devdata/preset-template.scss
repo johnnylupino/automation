@@ -1,0 +1,25 @@
+// An example preset file.
+
+/*************************** Variables section. *****************************/
+// Create variables to override the default value for variables used in the Moodle and Bootstrap SCSS files.
+
+$body-bg:white;
+$base-color: #e83283;
+$base-secondary-color: #752347;
+
+/*************************** Import section  *****************************/
+@import "fontawesome";
+@import "bootstrap";
+@import "moodle";
+
+/*************************** Rules section ****************************/
+body {
+    background-color: $body-bg;
+}
+.secondary-navigation {border-top: 1px solid $base-color;}
+.navbar ,.fixed-top  {box-shadow: 0px 0px 12px -2px rgba(235,90,155,0.5) !important; text-transform:uppercase; color:#A2235B;}
+.primary-navigation, .navigation, .nav-link {color: #A2235B !important;}
+.nav-link:hover, .nav-link:focus {background-color:#fad6e6 !important;color: #2e0a1a !important;}
+.navbar-brand  {background-color: $base-color; color:white !important; padding:4px !important;font-weight:700;}
+.page-header-headings {color: $base-color;}
+.login-heading {color: $base-color;}
