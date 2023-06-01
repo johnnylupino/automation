@@ -1,0 +1,6 @@
+1. json
+2. preset SCSS
+
+extract json
+add extracted variables to preset TEMPLATE
+connect description with AI
