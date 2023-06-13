@@ -28,13 +28,9 @@
                     "border-top": "1px solid $base-color"
                 }
             ],
-            "navbar": [
-                {
-                    "box-shadow": "box-shadow: 0px 0px 12px -2px rgba(235,90,155,0.5) !important; text-transform:uppercase; color:$nav-color;",
-                    "fixed-top": "box-shadow: 0px 0px 12px -2px rgba(235,90,155,0.5) !important; text-transform:uppercase; color:$nav-color;"
-                }
-            ],
-            "pimary-navigation": "color:$nav-color !important;",
+            "navbar": "box-shadow: 0px 0px 12px -2px rgba(235,90,155,0.5) !important; text-transform:uppercase; color:$nav-color;",
+            "fixed-top": "box-shadow: 0px 0px 12px -2px rgba(235,90,155,0.5) !important; text-transform:uppercase; color:$nav-color;",
+            "primary-navigation": "color:$nav-color !important;",
             "navigation": "color:$nav-color !important;",
             "navlink": "color:$nav-color !important;",
             "navlink-hover": "background-color:#fad6e6 !important;color: darken($base-color, $amount-1)",

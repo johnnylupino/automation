@@ -12,6 +12,9 @@ Library             RPA.JSON
 ${base_url}         http://localhost:8000
 ${theme_name}       Boost
 ${theme-config}     devdata/theme-config.json
+${site-name}        $.sitename
+${site-summary}     $.description[*].summary
+${nav-bar}          $.css-classes[*].navbar
 
 
 *** Tasks ***
@@ -24,7 +27,6 @@ Check selected theme
 
 Process json
     Load json and read
-    Get sitename and description from json
 
 
 *** Keywords ***
@@ -47,9 +49,8 @@ Navigate to theme page and read HTML table
     END
 
 Load json and read
-    ${json-file} =    Load JSON from file    ${theme-config}
+    &{json-file} =    Load JSON from file    ${theme-config}
+    ${sitename} =    Get values from JSON    ${json-file}    ${site-name}
+    ${summary} =    Get values from JSON    ${json-file}    ${site-summary}
+    ${navbar} =    Get values from JSON    ${json-file}    ${nav-bar}
     RETURN    ${json-file}
-
-Get sitename and description from json
-    ${file-content} =    Load json and read
-    Log To Console    ${file-content}
