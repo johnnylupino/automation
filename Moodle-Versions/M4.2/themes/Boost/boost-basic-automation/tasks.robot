@@ -6,15 +6,23 @@ Library             RPA.Robocorp.Vault
 Library             RPA.Tables
 Library             RPA.Desktop
 Library             RPA.JSON
+Library             Collections
+Library             RPA.Cloud.Azure
 
 
 *** Variables ***
-${base_url}         http://localhost:8000
-${theme_name}       Boost
-${theme-config}     devdata/theme-config.json
-${site-name}        $.sitename
-${site-summary}     $.description[*].summary
-${nav-bar}          $.css-classes[*].navbar
+${base_url}                     http://localhost:8000
+${theme_name}                   Boost
+${theme-config}                 devdata/theme-config.json
+${site-name}                    $.sitename
+${site-summary}                 $.description[*].summary
+${nav-bar}                      $.css-classes[*].navbar
+# collections
+@{list_of_values_in_json}       ${site-name}    ${site-summary}    ${nav-bar}
+&{css_classes} =                navbar=${nav-bar}
+# CSS syntax
+${class} =                      .
+${id} =                         \#
 
 
 *** Tasks ***
@@ -26,7 +34,8 @@ Check selected theme
     Navigate to theme page and read HTML table
 
 Process json
-    Load json and read
+    # Load json and read
+    Loop over list of variables
 
 
 *** Keywords ***
@@ -54,3 +63,16 @@ Load json and read
     ${summary} =    Get values from JSON    ${json-file}    ${site-summary}
     ${navbar} =    Get values from JSON    ${json-file}    ${nav-bar}
     RETURN    ${json-file}
+
+Concatenate CSS
+
+Loop over list of variables
+    &{json-file} =    Load JSON from file    ${theme-config}
+    # @{list_of_css_keys} =    Get Dictionary Keys    &{css_classes}
+    FOR    ${var}    IN    @{list_of_values_in_json}
+        ${result} =    Get value from JSON    ${json-file}    ${var}
+
+        Log    ${result}
+    END
+    ${res} =    Get Dictionary Items    ${css_classes}
+    Log    ${res}
