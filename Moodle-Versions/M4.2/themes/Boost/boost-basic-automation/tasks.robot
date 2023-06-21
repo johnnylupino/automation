@@ -11,18 +11,16 @@ Library             RPA.Cloud.Azure
 
 
 *** Variables ***
-${base_url}                     http://localhost:8000
-${theme_name}                   Boost
-${theme-config}                 devdata/theme-config.json
-${site-name}                    $.sitename
-${site-summary}                 $.description[*].summary
-${nav-bar}                      $.css-classes[*].navbar
+${base_url}         http://localhost:8000
+${theme_name}       Boost
+${theme-config}     devdata/theme-config.json
+${site-name}        $.sitename
+${site-summary}     $.description[*].summary
+${colors}           $.colors[*]
+${css}              $.css[*]
 # collections
-@{list_of_values_in_json}       ${site-name}    ${site-summary}    ${nav-bar}
-&{css_classes} =                navbar=${nav-bar}
-# CSS syntax
-${class} =                      .
-${id} =                         \#
+@{site-info} =      ${site-name}    ${site-summary}
+@{css_in_json}      ${css}
 
 
 *** Tasks ***
@@ -61,18 +59,14 @@ Load json and read
     &{json-file} =    Load JSON from file    ${theme-config}
     ${sitename} =    Get values from JSON    ${json-file}    ${site-name}
     ${summary} =    Get values from JSON    ${json-file}    ${site-summary}
-    ${navbar} =    Get values from JSON    ${json-file}    ${nav-bar}
+    ${css} =    Get values from JSON    ${json-file}    ${css}
     RETURN    ${json-file}
 
 Concatenate CSS
 
 Loop over list of variables
     &{json-file} =    Load JSON from file    ${theme-config}
-    # @{list_of_css_keys} =    Get Dictionary Keys    &{css_classes}
-    FOR    ${var}    IN    @{list_of_values_in_json}
+    FOR    ${var}    IN    @{css_in_json}
         ${result} =    Get value from JSON    ${json-file}    ${var}
-
         Log    ${result}
     END
-    ${res} =    Get Dictionary Items    ${css_classes}
-    Log    ${res}
