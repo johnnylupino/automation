@@ -20,7 +20,7 @@ ${colors}           $.colors[*]
 ${css}              $.css[*]
 # collections
 @{site-info} =      ${site-name}    ${site-summary}
-@{css_in_json}      ${css}
+@{css_in_json} =    ${css}
 
 
 *** Tasks ***
