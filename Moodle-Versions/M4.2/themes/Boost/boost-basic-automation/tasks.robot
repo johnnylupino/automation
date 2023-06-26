@@ -11,16 +11,17 @@ Library             RPA.Cloud.Azure
 
 
 *** Variables ***
-${base_url}         http://localhost:8000
-${theme_name}       Boost
-${theme-config}     devdata/theme-config.json
-${site-name}        $.sitename
-${site-summary}     $.description[*].summary
-${colors}           $.colors[*]
-${css}              $.css[*]
+${base_url}             http://localhost:8000
+${theme_name}           Boost
+${theme-config}         devdata/theme-config.json
+${site-name}            $.sitename
+${site-summary}         $.description[*].summary
+${colors}               $.colors[*]
+${css}                  $.css[*]
 # collections
-@{site-info} =      ${site-name}    ${site-summary}
-@{css_in_json} =    ${css}
+@{site-info} =          ${site-name}    ${site-summary}
+@{css_in_json} =        ${css}
+@{colors_in_json} =     ${colors}
 
 
 *** Tasks ***
@@ -33,7 +34,8 @@ Check selected theme
 
 Process json
     # Load json and read
-    Loop over list of variables
+    Loop over list of css rules
+    # Process json scss variables
 
 
 *** Keywords ***
@@ -62,11 +64,14 @@ Load json and read
     ${css} =    Get values from JSON    ${json-file}    ${css}
     RETURN    ${json-file}
 
-Concatenate CSS
-
-Loop over list of variables
+Loop over list of css rules
     &{json-file} =    Load JSON from file    ${theme-config}
     FOR    ${var}    IN    @{css_in_json}
         ${result} =    Get value from JSON    ${json-file}    ${var}
-        Log    ${result}
+        Log    \nOUTPUT IS\n ${result}    console=${True}
     END
+
+Process json scss variables
+# split the output by delimiter and insert intopreset.scss
+
+Open preset file and insert data

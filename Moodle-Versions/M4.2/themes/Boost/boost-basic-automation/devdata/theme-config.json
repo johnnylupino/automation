@@ -24,7 +24,7 @@
         {
             "$body-bg": "white",
             "$base-color": "#e83283",
-            "$secondary-color": "#752347",
+            "$base-secondary-color": "#752347",
             "$nav-color": "#A2235B",
             "$amount-1": "20",
             "$amount-2": "40"
@@ -32,27 +32,13 @@
     ],
     "css": [
         {
-            "body": "background-color: $body-bg;"
-        },
-        {
-            ".secondary-navigation": "{border-top: 1px solid $base-color;}"
-        },
-        {
-            ".navbar ,.fixed-top ": "{box-shadow: 0px 0px 12px -2px rgba(235,90,155,0.5) !important; text-transform:uppercase; color:$nav-color;}"
-        },
-        {
-            ".primary-navigation, .navigation, .nav-link": "{color:$nav-color !important;}"
-        },
-        {
-            ".nav-link:hover, .nav-link:focus": "{background-color:#fad6e6 !important;color: darken($base-color, $amount-1);}"
-        },
-        {
-            ".navbar-brand ": "{background-color: $base-color; color:$body-bg !important; padding:4px !important;font-weight:700;}"
-        },
-        {
-            ".page-header-headings": "{color: $base-color;}"
-        },
-        {
+            "body": "{background-color: $body-bg;}",
+            ".secondary-navigation": "{border-top: 1px solid $base-color;}",
+            ".navbar ,.fixed-top ": "{box-shadow: 0px 0px 12px -2px rgba(235,90,155,0.5) !important; text-transform:uppercase; color:$nav-color;}",
+            ".primary-navigation, .navigation, .nav-link": "{color:$nav-color !important;}",
+            ".nav-link:hover, .nav-link:focus": "{background-color:#fad6e6 !important;color: darken($base-color, $amount-1);}",
+            ".navbar-brand ": "{background-color: $base-color; color:$body-bg !important; padding:4px !important;font-weight:700;}",
+            ".page-header-headings": "{color: $base-color;}",
             ".login-heading": "{color: $base-color;}"
         }
     ]
