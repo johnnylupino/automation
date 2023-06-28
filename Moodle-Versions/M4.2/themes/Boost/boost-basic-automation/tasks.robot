@@ -8,9 +8,12 @@ Library             RPA.Desktop
 Library             RPA.JSON
 Library             Collections
 Library             RPA.Cloud.Azure
+Library             String
+Library             RPA.FileSystem
 
 
 *** Variables ***
+${PRESET_FILE_PATH}=    ${OUTPUT_DIR}${/}devdata${/}preset.scss
 ${base_url}             http://localhost:8000
 ${theme_name}           Boost
 ${theme-config}         devdata/theme-config.json
@@ -35,7 +38,6 @@ Check selected theme
 Process json
     # Load json and read
     Loop over list of css rules
-    # Process json scss variables
 
 
 *** Keywords ***
@@ -69,9 +71,12 @@ Loop over list of css rules
     FOR    ${var}    IN    @{css_in_json}
         ${result} =    Get value from JSON    ${json-file}    ${var}
         Log    \nOUTPUT IS\n ${result}    console=${True}
+        ${lines} =    Get Dictionary Items    ${result}
+    END
+    FOR    ${key}    IN    @{result}
+        Log    ${key}:${result}[${key}]
+        # string=cat, number=1, list=['one', 'two', 'three']
     END
 
-Process json scss variables
-# split the output by delimiter and insert intopreset.scss
-
-Open preset file and insert data
+Open preset file
+    Read File    ${PRESET_FILE_PATH}
