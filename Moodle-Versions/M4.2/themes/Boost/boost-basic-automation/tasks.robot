@@ -13,7 +13,8 @@ Library             RPA.FileSystem
 
 
 *** Variables ***
-${PRESET_FILE_PATH}=    ${OUTPUT_DIR}${/}devdata${/}preset.scss
+${PRESET_FILE_PATH}     devdata/preset.scss
+${OUTPUT_FILE}          preset.scss
 ${base_url}             http://localhost:8000
 ${theme_name}           Boost
 ${theme-config}         devdata/theme-config.json
@@ -21,6 +22,9 @@ ${site-name}            $.sitename
 ${site-summary}         $.description[*].summary
 ${colors}               $.colors[*]
 ${css}                  $.css[*]
+${var_section}          $.variables_header
+${import_section}       $.import_header
+${rules_section}        $.rules_header
 # collections
 @{site-info} =          ${site-name}    ${site-summary}
 @{css_in_json} =        ${css}
@@ -38,6 +42,7 @@ Check selected theme
 Process json
     # Load json and read
     Loop over list of css rules
+    # Open preset file
 
 
 *** Keywords ***
@@ -73,10 +78,14 @@ Loop over list of css rules
         Log    \nOUTPUT IS\n ${result}    console=${True}
         ${lines} =    Get Dictionary Items    ${result}
     END
+    Create File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    overwrite=True
     FOR    ${key}    IN    @{result}
-        Log    ${key}:${result}[${key}]
+        Log    ${key} ${result}[${key}]
+        Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n${key}:${result}[${key}]
         # string=cat, number=1, list=['one', 'two', 'three']
     END
 
 Open preset file
-    Read File    ${PRESET_FILE_PATH}
+    # ${file_content} =    Read File    ${PRESET_FILE_PATH}
+    # Should Match Regexp    ${file_content}    Rules section
+    # Create File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    content=    overwrite=True
