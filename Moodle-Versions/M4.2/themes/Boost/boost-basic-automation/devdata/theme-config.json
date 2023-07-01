@@ -11,14 +11,10 @@
             ]
         }
     ],
-    "template": [
-        {
-            "@import": [
-                "fontawesome",
-                "bootstrap",
-                "moodle"
-            ]
-        }
+    "import": [
+        "fontawesome",
+        "bootstrap",
+        "moodle"
     ],
     "variables_header": "/*************************** Variables section. *****************************/",
     "import_header": "/*************************** Import section  *****************************/",

@@ -13,20 +13,20 @@ Library             RPA.FileSystem
 
 
 *** Variables ***
-${PRESET_FILE_PATH}     devdata/preset.scss
 ${OUTPUT_FILE}          preset.scss
-${base_url}             http://localhost:8000
-${theme_name}           Boost
+${base-url}             http://localhost:8000
+${theme-name}           Boost
 ${theme-config}         devdata/theme-config.json
 ${site-name}            $.sitename
 ${site-summary}         $.description[*].summary
 ${colors}               $.colors[*]
+${import}               $.import
 ${css}                  $.css[*]
 ${var_section}          $.variables_header
 ${import_section}       $.import_header
 ${rules_section}        $.rules_header
 # collections
-@{site-info} =          ${site-name}    ${site-summary}
+@{imports} =            ${import}
 @{css_in_json} =        ${css}
 @{colors_in_json} =     ${colors}
 
@@ -40,9 +40,7 @@ Check selected theme
     Navigate to theme page and read HTML table
 
 Process json
-    # Load json and read
-    Loop over list of css rules
-    # Open preset file
+    Create preset file
 
 
 *** Keywords ***
@@ -56,9 +54,9 @@ Log In
     Submit Form
 
 Navigate to theme page and read HTML table
-    Go To    ${base_url}/theme/index.php
+    Go To    ${base-url}/theme/index.php
     ${find_theme_name} =    Get Element Attribute    css:td.cell.c2.lastcol > h3    innerHTML
-    IF    "${find_theme_name}" == "${theme_name}"
+    IF    "${find_theme_name}" == "${theme-name}"
         Log To Console    ${find_theme_name}
     ELSE
         Log To Console    "Error, wrong theme, exiting..."
@@ -68,24 +66,32 @@ Load json and read
     &{json-file} =    Load JSON from file    ${theme-config}
     ${sitename} =    Get values from JSON    ${json-file}    ${site-name}
     ${summary} =    Get values from JSON    ${json-file}    ${site-summary}
-    ${css} =    Get values from JSON    ${json-file}    ${css}
     RETURN    ${json-file}
 
-Loop over list of css rules
+Create preset file
     &{json-file} =    Load JSON from file    ${theme-config}
-    FOR    ${var}    IN    @{css_in_json}
-        ${result} =    Get value from JSON    ${json-file}    ${var}
-        Log    \nOUTPUT IS\n ${result}    console=${True}
-        ${lines} =    Get Dictionary Items    ${result}
-    END
     Create File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    overwrite=True
-    FOR    ${key}    IN    @{result}
-        Log    ${key} ${result}[${key}]
-        Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n${key}:${result}[${key}]
-        # string=cat, number=1, list=['one', 'two', 'three']
+    Create rules section    ${json-file}
+    Create import section    ${json-file}
+
+Create import section
+    [Arguments]    ${json-file}
+    ${import-section} =    Get value from JSON    ${json-file}    ${import_section}
+    @{list} =    Get values from JSON    ${json-file}    ${import}
+
+    FOR    ${var}    IN    @{list}
+        Log    ${var}
     END
 
-Open preset file
-    # ${file_content} =    Read File    ${PRESET_FILE_PATH}
-    # Should Match Regexp    ${file_content}    Rules section
-    # Create File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    content=    overwrite=True
+Create rules section
+    [Arguments]    ${json-file}
+    ${rules-section} =    Get value from JSON    ${json-file}    ${rules_section}
+    Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    ${rules-section}
+
+    FOR    ${var}    IN    @{css_in_json}
+        ${result} =    Get value from JSON    ${json-file}    ${var}
+    END
+    FOR    ${key}    IN    @{result}
+        Log    ${key} ${result}[${key}]
+        Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n${key}${result}[${key}]
+    END
