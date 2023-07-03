@@ -81,9 +81,9 @@ Create import section
     @{list} =    Get value from JSON    ${json-file}    ${import}
     FOR    ${var}    IN    @{list}
         Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n@import "${var}";
-        Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n
         Log    @import "${var}"
     END
+    Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n
 
 Create rules section
     [Arguments]    ${json-file}
