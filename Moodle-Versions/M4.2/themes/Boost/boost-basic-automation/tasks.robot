@@ -7,7 +7,6 @@ Library             RPA.Tables
 Library             RPA.Desktop
 Library             RPA.JSON
 Library             Collections
-Library             RPA.Cloud.Azure
 Library             String
 Library             RPA.FileSystem
 
@@ -71,22 +70,25 @@ Load json and read
 Create preset file
     &{json-file} =    Load JSON from file    ${theme-config}
     Create File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    overwrite=True
-    Create rules section    ${json-file}
     Create import section    ${json-file}
+    Create rules section    ${json-file}
 
 Create import section
     [Arguments]    ${json-file}
     ${import-section} =    Get value from JSON    ${json-file}    ${import_section}
-    @{list} =    Get values from JSON    ${json-file}    ${import}
+    Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n${import-section}
 
+    @{list} =    Get value from JSON    ${json-file}    ${import}
     FOR    ${var}    IN    @{list}
-        Log    ${var}
+        Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n@import "${var}";
+        Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n
+        Log    @import "${var}"
     END
 
 Create rules section
     [Arguments]    ${json-file}
     ${rules-section} =    Get value from JSON    ${json-file}    ${rules_section}
-    Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    ${rules-section}
+    Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n${rules-section}
 
     FOR    ${var}    IN    @{css_in_json}
         ${result} =    Get value from JSON    ${json-file}    ${var}
