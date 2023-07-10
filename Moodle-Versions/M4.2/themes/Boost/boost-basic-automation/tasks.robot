@@ -118,5 +118,5 @@ Create rules section
 Navigate to preset upload page
     Go To    ${base-url}/admin/settings.php?section=themesettingboost
     ${file-uploader} =    Click Element When Visible    css:div.filemanager-toolbar a[title="Add..."]
-    Wait For Element    css:input[name="repo_upload_file"]    timeout=5.0
-    Choose File    css:input[name="repo_upload_file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
+    Element Should Be Visible    css:div.moodle-dialogue-base
+    # Choose File    css:input[name="repo_upload_file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
