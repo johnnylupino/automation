@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation       Basic Boost configuration using data provided in a template
 
-Library             RPA.Browser.Selenium
+Library             RPA.Browser.Selenium    auto_close=${FALSE}
 Library             RPA.Robocorp.Vault
 Library             RPA.Tables
 Library             RPA.Desktop
@@ -40,6 +40,7 @@ Check selected theme
 
 Process json
     Create preset file
+    Navigate to preset upload page
 
 
 *** Keywords ***
@@ -70,8 +71,24 @@ Load json and read
 Create preset file
     &{json-file} =    Load JSON from file    ${theme-config}
     Create File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    overwrite=True
+    Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    // Preset number X \n
+    Create variables section    ${json-file}
     Create import section    ${json-file}
     Create rules section    ${json-file}
+
+Create variables section
+    [Arguments]    ${json-file}
+    ${var-section} =    Get value from JSON    ${json-file}    ${var_section}
+    Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n${var-section}
+
+    FOR    ${var}    IN    @{colors_in_json}
+        ${result} =    Get value from JSON    ${json-file}    ${var}
+    END
+    FOR    ${key}    IN    @{result}
+        Log    ${key} ${result}[${key}]
+        Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n${key}:${result}[${key}]
+    END
+    Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n
 
 Create import section
     [Arguments]    ${json-file}
@@ -97,3 +114,9 @@ Create rules section
         Log    ${key} ${result}[${key}]
         Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n${key}${result}[${key}]
     END
+
+Navigate to preset upload page
+    Go To    ${base-url}/admin/settings.php?section=themesettingboost
+    ${file-uploader} =    Click Element When Visible    css:div.filemanager-toolbar a[title="Add..."]
+    Wait For Element    css:input[name="repo_upload_file"]    timeout=5.0
+    Choose File    css:input[name="repo_upload_file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}

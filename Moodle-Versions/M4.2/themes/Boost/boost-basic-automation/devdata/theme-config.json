@@ -21,12 +21,12 @@
     "rules_header": "/*************************** Rules section ****************************/",
     "colors": [
         {
-            "$body-bg": "white",
-            "$base-color": "#e83283",
-            "$base-secondary-color": "#752347",
-            "$nav-color": "#A2235B",
-            "$amount-1": "20",
-            "$amount-2": "40"
+            "$body-bg": "white;",
+            "$base-color": "#e83283;",
+            "$base-secondary-color": "#752347;",
+            "$nav-color": "#A2235B;",
+            "$amount-1": "20;",
+            "$amount-2": "40;"
         }
     ],
     "css": [
