@@ -25,9 +25,9 @@ ${var_section}          $.variables_header
 ${import_section}       $.import_header
 ${rules_section}        $.rules_header
 # collections
-@{imports} =            ${import}
-@{css_in_json} =        ${css}
-@{colors_in_json} =     ${colors}
+@{imports}              ${import}
+@{css_in_json}          ${css}
+@{colors_in_json}       ${colors}
 
 
 *** Tasks ***
@@ -40,7 +40,7 @@ Check selected theme
 
 Process json
     Create preset file
-    Navigate to preset upload page
+    Process preset file
 
 
 *** Keywords ***
@@ -115,8 +115,12 @@ Create rules section
         Append To File    ${OUTPUT_DIR}${/}${OUTPUT_FILE}    \n${key}${result}[${key}]
     END
 
-Navigate to preset upload page
+Process preset file
     Go To    ${base-url}/admin/settings.php?section=themesettingboost
+    Upload preset file
+
+Upload preset file
     ${file-uploader} =    Click Element When Visible    css:div.filemanager-toolbar a[title="Add..."]
-    Element Should Be Visible    css:"div.moodle-dialogue-base div.container repository_upload"
-    # Choose File    css:input[name="repo_upload_file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
+    Wait Until Element Is Visible    css:input[type="file"]    timeout=15.0
+    Choose File    css:input[type="file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
+    Click Button    class:fp-upload-btn
