@@ -121,6 +121,7 @@ Process preset file
 
 Upload preset file
     ${file-uploader} =    Click Element When Visible    css:div.filemanager-toolbar a[title="Add..."]
-    Wait Until Element Is Visible    css:input[type="file"]    timeout=15.0
+    Wait Until Element Is Visible    css:input[type="file"]    timeout=45.0
     Choose File    css:input[type="file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
     Click Button    class:fp-upload-btn
+    Click Button    link:Save changes
