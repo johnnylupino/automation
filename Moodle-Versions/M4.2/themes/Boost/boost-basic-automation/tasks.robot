@@ -55,7 +55,7 @@ Log In
 
 Navigate to theme page and read HTML table
     Go To    ${base-url}/theme/index.php
-    ${find_theme_name} =    Get Element Attribute    css:td.cell.c2.lastcol > h3    innerHTML
+    ${find_theme_name} =    Get Element Attribute    css:td.cell.c1.lastcol > h3    innerHTML
     IF    "${find_theme_name}" == "${theme-name}"
         Log To Console    ${find_theme_name}
     ELSE
@@ -124,4 +124,8 @@ Upload preset file
     Wait Until Element Is Visible    css:input[type="file"]    timeout=45.0
     Choose File    css:input[type="file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
     Click Button    class:fp-upload-btn
-    Click Button    link:Save changes
+    Wait Until Element Is Visible    Save changes    timeout=25.0
+    Click Button    Save changes    
+    Select From List By Value   name:s_theme_boost_preset    ${OUTPUT_FILE}
+    Wait Until Element Is Visible    Save changes    timeout=25.0
+    Click Button    Save changes 
