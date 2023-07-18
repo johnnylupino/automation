@@ -41,6 +41,8 @@ Check selected theme
 Process json
     Create preset file
     Process preset file
+    Upload preset file
+    Save after preset upload
 
 
 *** Keywords ***
@@ -116,16 +118,16 @@ Create rules section
     END
 
 Process preset file
-    Go To    ${base-url}/admin/settings.php?section=themesettingboost
-    Upload preset file
+    Go To    ${base-url}/admin/settings.php?section=themesettingboost#theme_boost_general
 
 Upload preset file
     ${file-uploader} =    Click Element When Visible    css:div.filemanager-toolbar a[title="Add..."]
     Wait Until Element Is Visible    css:input[type="file"]    timeout=45.0
     Choose File    css:input[type="file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
     Click Button    class:fp-upload-btn
-    Wait Until Element Is Visible    Save changes    timeout=25.0
-    Click Button    Save changes    
+
+Save after preset upload
+    Wait Until Page Contains Element    preset.scss   timeout=25.0
+    Submit Form
     Select From List By Value   name:s_theme_boost_preset    ${OUTPUT_FILE}
-    Wait Until Element Is Visible    Save changes    timeout=25.0
-    Click Button    Save changes 
+    Click Element If Visible    //button[text()='Save changes']
