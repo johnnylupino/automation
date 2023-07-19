@@ -42,7 +42,7 @@ Process json
     Create preset file
     Process preset file
     Upload preset file
-    Save after preset upload
+    Save after preset upload 1
 
 
 *** Keywords ***
@@ -124,10 +124,15 @@ Upload preset file
     ${file-uploader} =    Click Element When Visible    css:div.filemanager-toolbar a[title="Add..."]
     Wait Until Element Is Visible    css:input[type="file"]    timeout=45.0
     Choose File    css:input[type="file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
+    Input Text    css:input[name="title"]    ${OUTPUT_FILE}
+    Set Browser Implicit Wait    20 seconds
     Click Button    class:fp-upload-btn
 
-Save after preset upload
-    Wait Until Page Contains Element    preset.scss   timeout=25.0
-    Submit Form
-    Select From List By Value   name:s_theme_boost_preset    ${OUTPUT_FILE}
-    Click Element If Visible    //button[text()='Save changes']
+Save after preset upload 1
+    Wait Until Page Does Not Contain    class:fp-upload-btn   timeout=25.0
+    Page Should Contain Button    //button[text()='Save changes']
+    Click Button When Visible    //button[text()='Save changes']
+#Save after preset upload 2
+    #Wait Until Element Is Visible    css:img[title="preset.scss"]    timeout=25.0
+    #Select From List By Value   name:s_theme_boost_preset    ${OUTPUT_FILE}
+    #Click Button When Visible    //button[text()='Save changes']
