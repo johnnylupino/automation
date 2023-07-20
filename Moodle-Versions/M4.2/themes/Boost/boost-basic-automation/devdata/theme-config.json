@@ -38,7 +38,8 @@
             ".nav-link:hover, .nav-link:focus": "{background-color:#fad6e6 !important;color: darken($base-color, $amount-1);}",
             ".navbar-brand ": "{background-color: $base-color; color:$body-bg !important; padding:4px !important;font-weight:700;}",
             ".page-header-headings": "{color: $base-color;}",
-            ".login-heading": "{color: $base-color;}"
+            ".login-heading": "{color: $base-color;}",
+            "a": "{color: darken($base-color, $amount-2);}"
         }
     ]
 }

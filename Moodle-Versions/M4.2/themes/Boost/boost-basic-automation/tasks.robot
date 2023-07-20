@@ -19,6 +19,7 @@ ${theme-config}         devdata/theme-config.json
 ${site-name}            $.sitename
 ${site-summary}         $.description[*].summary
 ${colors}               $.colors[*]
+${brand_color}          $.colors[]*.\$base-color
 ${import}               $.import
 ${css}                  $.css[*]
 ${var_section}          $.variables_header
@@ -42,7 +43,8 @@ Process json
     Create preset file
     Process preset file
     Upload preset file
-    Save after preset upload 1
+    Save after preset upload
+    Select preset file
 
 
 *** Keywords ***
@@ -124,15 +126,16 @@ Upload preset file
     ${file-uploader} =    Click Element When Visible    css:div.filemanager-toolbar a[title="Add..."]
     Wait Until Element Is Visible    css:input[type="file"]    timeout=45.0
     Choose File    css:input[type="file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
-    Input Text    css:input[name="title"]    ${OUTPUT_FILE}
     Set Browser Implicit Wait    20 seconds
     Click Button    class:fp-upload-btn
 
-Save after preset upload 1
+Save after preset upload
     Wait Until Page Does Not Contain    class:fp-upload-btn   timeout=25.0
-    Page Should Contain Button    //button[text()='Save changes']
     Click Button When Visible    //button[text()='Save changes']
-#Save after preset upload 2
-    #Wait Until Element Is Visible    css:img[title="preset.scss"]    timeout=25.0
-    #Select From List By Value   name:s_theme_boost_preset    ${OUTPUT_FILE}
-    #Click Button When Visible    //button[text()='Save changes']
+
+Select preset file
+    Select From List By Value   name:s_theme_boost_preset    ${OUTPUT_FILE}
+    Set Browser Implicit Wait    8 seconds
+    Click Button When Visible    //button[text()='Save changes']
+    Input Text    s_theme_boost_brandcolor    ${brand_color}
+    Reload Page
