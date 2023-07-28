@@ -19,7 +19,7 @@ ${theme-config}         devdata/theme-config.json
 ${site-name}            $.sitename
 ${site-summary}         $.description[*].summary
 ${colors}               $.colors[*]
-${brand_color}          $.colors[]*.\$base-color
+${brand_color}          $.colors[0]
 ${import}               $.import
 ${css}                  $.css[*]
 ${var_section}          $.variables_header
@@ -45,6 +45,7 @@ Process json
     Upload preset file
     Save after preset upload
     Select preset file
+    Set brand color
 
 
 *** Keywords ***
@@ -126,7 +127,7 @@ Upload preset file
     ${file-uploader} =    Click Element When Visible    css:div.filemanager-toolbar a[title="Add..."]
     Wait Until Element Is Visible    css:input[type="file"]    timeout=45.0
     Choose File    css:input[type="file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
-    Set Browser Implicit Wait    20 seconds
+    Set Browser Implicit Wait    5 seconds
     Click Button    class:fp-upload-btn
 
 Save after preset upload
@@ -135,7 +136,15 @@ Save after preset upload
 
 Select preset file
     Select From List By Value   name:s_theme_boost_preset    ${OUTPUT_FILE}
-    Set Browser Implicit Wait    8 seconds
+    Set Browser Implicit Wait    5 seconds
     Click Button When Visible    //button[text()='Save changes']
-    Input Text    s_theme_boost_brandcolor    ${brand_color}
     Reload Page
+
+Set brand color
+     &{json-file} =    Load JSON from file    ${theme-config}
+     Log     ${json-file}
+     &{brand} =    Get value from JSON    ${json-file}     ${brand_color}
+     Log    ${brand}
+     #Input Text    s_theme_boost_brandcolor    ${brand}
+     #Click Button When Visible    //button[text()='Save changes']
+     #Reload Page
