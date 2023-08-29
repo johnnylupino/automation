@@ -7,7 +7,8 @@ Library             RPA.Robocorp.Vault
 Library             RPA.FileSystem   
 Library             SSHLibrary 
 Library             RPA.Assistant
-Library    String
+Library             String
+Library             OperatingSystem
 
 *** Variables ***
 ${template-dir}        devdata
@@ -15,12 +16,13 @@ ${OUTPUT_DIR}          devdata/template
 ${base-url}            http://localhost:8000
 ${theme-dir}           /Users/robot/git/moodle/moodle-4.2/theme
 ${theme-name}          Boost child
-${search-pattern}      ThemeName
+${search-pattern}      %%theme-name%%
 
 *** Tasks ***
 Copy template under theme dir
     #Enter theme name and copy template
-    Search regex
+    #Search regex
+    List all dirs
 
 *** Keywords ***
 Enter theme name and copy template
@@ -38,17 +40,27 @@ Search regex
     FOR    ${file}    IN    @{files}
         Log    ${file}
         ${file-content}=    Read File    ${file}
-        Get Lines Containing String   ${file-content}    boost_clone
+        Get Lines Containing String   ${file-content}    ${search-pattern}
     END
     
-    # @{list_of_dirs}=     Create List    lang    templates
-    # FOR    ${dir}    IN    @{list_of_dirs}
-    #     ${files}=    RPA.FileSystem.List Directories In Directory    
-    #     ...    ${CURDIR}${/}devdata${/}template${/}${dir}
-    #     Log    ${dir}
-    #     FOR    ${file}    IN    @{files}
-    #         Log    ${file}
-            
-    #     END
-    # END
-
+List all dirs
+    @{dirs}=    RPA.FileSystem.List Directories In Directory
+    ...    ${CURDIR}${/}devdata${/}template
+    @{files}=    RPA.Filesystem.List Files In Directory
+    ...    ${CURDIR}${/}devdata${/}template
+    FOR    ${file}    IN    @{files}
+        Log    ${file}      
+    END
+    FOR    ${dir}    IN    @{dirs}
+        ${check}=    Is Directory Not Empty    ${dir}
+        ${conv}=    Convert To String    ${dir}
+        ${path}    ${split}=    Split Path    ${conv}
+        Log    ${dir}
+        @{sub-dirs}=    RPA.FileSystem.List Directories In Directory    
+            ...    ${path}${/}${split}
+        IF    ${check}         
+            FOR    ${sub-dir}    IN    @{sub-dirs}
+                Log   'sub-directories:' ${sub-dir}
+            END
+        END
+    END
