@@ -21,20 +21,21 @@ ${search-pattern}      %%theme-name%%
 *** Tasks ***
 Copy template under theme dir
     #Enter theme name and copy template
-    #Search regex
-    List all dirs
+    #Search string
+    List files in sub directories
+    List all files in template dir
 
 *** Keywords ***
 Enter theme name and copy template
     Add heading       Enter child theme name
     Add text input    text
     ${child-theme-name}=    Ask User
-    Copy Directory    ${OUTPUT_DIR}    
+    RPA.FileSystem.Copy Directory    ${OUTPUT_DIR}    
     ...    ${theme-dir}${/}${child-theme-name}[text]
     Log To Console    ${child-theme-name}
     RETURN    ${child-theme-name}
 
-Search regex
+Search string
     ${files}=    RPA.FileSystem.List Files In Directory   
     ...    ${CURDIR}${/}devdata${/}template
     FOR    ${file}    IN    @{files}
@@ -43,14 +44,9 @@ Search regex
         Get Lines Containing String   ${file-content}    ${search-pattern}
     END
     
-List all dirs
+List files in sub directories
     @{dirs}=    RPA.FileSystem.List Directories In Directory
     ...    ${CURDIR}${/}devdata${/}template
-    @{files}=    RPA.Filesystem.List Files In Directory
-    ...    ${CURDIR}${/}devdata${/}template
-    FOR    ${file}    IN    @{files}
-        Log    ${file}      
-    END
     FOR    ${dir}    IN    @{dirs}
         ${check}=    Is Directory Not Empty    ${dir}
         ${conv}=    Convert To String    ${dir}
@@ -63,4 +59,13 @@ List all dirs
                 Log   'sub-directories:' ${sub-dir}
             END
         END
+    END
+
+List all files in template dir
+    ${variable}=    Set Variable    template
+    @{files}=    RPA.Filesystem.List Files In Directory
+    ...    ${CURDIR}${/}devdata${/}${variable}
+    FOR    ${file}    IN    @{files}
+        Log  'Files in base dir:' ${file}
+        #add search function - creat one for both lists
     END
