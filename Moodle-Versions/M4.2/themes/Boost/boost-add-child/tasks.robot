@@ -9,7 +9,7 @@ Library             SSHLibrary
 Library             RPA.Assistant
 Library             String
 Library             OperatingSystem
-Library    RPA.Images
+Library             Collections
 
 *** Variables ***
 ${template-dir}        devdata
@@ -22,8 +22,11 @@ ${search-pattern}      %%theme-name%%
 Copy template under theme dir
     ${child-theme-name}=    Enter theme name and copy template
     ${theme-new-dir}=    Copy template    ${child-theme-name}
-    List files in sub directories    theme-new-dir=${theme-new-dir}
-    List all files in template dir    theme-new-dir=${theme-new-dir}
+    ${confirm}=    Confirm theme name replaced in template dir    ${theme-new-dir}
+    #${cond}=    Should Not Be Empty    ${confirm}
+    #Pass Execution If    ${cond}   Theme name already replaced
+    Search all files in sub directories    theme-new-dir=${theme-new-dir}    child-theme-name=${child-theme-name}
+    Search all files in template dir    theme-new-dir=${theme-new-dir}   child-theme-name=${child-theme-name} 
 
 
 *** Keywords ***
@@ -40,8 +43,8 @@ Copy template
     ${theme-new-dir}=    Set Variable    ${theme-dir}${/}${child-theme-name}[text]
     RETURN    ${theme-new-dir}
     
-List files in sub directories
-    [Arguments]    ${theme-new-dir}
+Search all files in sub directories
+    [Arguments]    ${theme-new-dir}    ${child-theme-name}
     @{dirs}=    RPA.FileSystem.List Directories In Directory
     ...    ${theme-new-dir}
     FOR    ${dir}    IN    @{dirs}
@@ -54,33 +57,41 @@ List files in sub directories
         IF    ${check}         
             FOR    ${sub-dir}    IN    @{sub-dirs}
                 Log   'Available sub-directories:' ${sub-dir}
-                Search for files in sub-directory    sub-dir=${sub-dir}
+                Search for files in sub-directory    sub-dir=${sub-dir}    child-theme-name=${child-theme-name}
             END
         END
     END
 
-List all files in template dir
-    [Arguments]    ${theme-new-dir}
+Search all files in template dir
+    [Arguments]    ${theme-new-dir}    ${child-theme-name}
     @{files}=    RPA.Filesystem.List Files In Directory
     ...    ${theme-new-dir}
     FOR    ${file}    IN    @{files}
-        Log  'Files in base dir:' ${file}
-        Search for pattern    search-pattern=${search-pattern}    file=${file}
+        Run    sed -i '' 's/${search-pattern}/${child-theme-name}[text]/g' ${file}
     END
 
 Search for pattern
     [Arguments]    ${search-pattern}    ${file}
     ${file-content}=    Read File    ${file}
     ${result}=    Get Lines Containing String   ${file-content}    ${search-pattern}
+    RETURN    ${result}
 
 Search for files in sub-directory
-    [Arguments]    ${sub-dir}
+    [Arguments]    ${sub-dir}   ${child-theme-name} 
     @{files}=    RPA.Filesystem.List Files In Directory    ${sub-dir}
     FOR    ${file}    IN    @{files}
-      Log  'Files in sub-directories:' ${file}
-        Search for pattern    search-pattern=${search-pattern}    file=${file}
+        Run    sed -i '' 's/${search-pattern}/${child-theme-name}[text]/g' ${file}
     END
+       
+Confirm theme name replaced in template dir
+    [Arguments]    ${theme-new-dir}
+    @{files}=    RPA.Filesystem.List Files In Directory
+    ...    ${theme-new-dir}
+    FOR    ${file}    IN    @{files}
+        Log  'Files in base dir:' ${file}
+        ${result}=    Search for pattern    search-pattern=${search-pattern}    file=${file}
+    END
+    RETURN    ${result}
 
-#Replace pattern in files
-   # [Arguments]    ${search-pattern}    ${file}    ${child-theme-name}
-   # Replace String    ${search-pattern}    ${file}    ${child-theme-name}
+
+    #need function for en/ directory - name not replaced
