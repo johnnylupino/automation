@@ -10,6 +10,7 @@ Library             RPA.Assistant
 Library             String
 Library             OperatingSystem
 Library             Collections
+Library             Process
 
 *** Variables ***
 ${template-dir}        devdata
@@ -80,9 +81,10 @@ Search for files in sub-directory
     [Arguments]    ${sub-dir}   ${child-theme-name} 
     @{files}=    RPA.Filesystem.List Files In Directory    ${sub-dir}
     FOR    ${file}    IN    @{files}
+        Run   rename 's/${search-pattern}/${child-theme-name}[text]/' ${file}
         Run    sed -i '' 's/${search-pattern}/${child-theme-name}[text]/g' ${file}
     END
-       
+
 Confirm theme name replaced in template dir
     [Arguments]    ${theme-new-dir}
     @{files}=    RPA.Filesystem.List Files In Directory
@@ -94,4 +96,4 @@ Confirm theme name replaced in template dir
     RETURN    ${result}
 
 
-    #need function for en/ directory - name not replaced
+    #need function for en/ directory - name not replaced - available subdirectories!
