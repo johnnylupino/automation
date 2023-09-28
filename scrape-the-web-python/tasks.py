@@ -7,10 +7,14 @@ from matplotlib import colors
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
+import pathlib
+import os
 
 site_name = "http://www.kermeet.pl"
 output_image = "output/screenshot.png"
 analyzed_image = "output/color_analysis_report.png"
+output_colors = "output/output_colors.txt"
+variables_file = "devdata/variables.txt"
 
 @task
 def open_web_and_screenshot():
@@ -54,7 +58,22 @@ def color_analysis(img):
     plt.pie(counts.values(), labels = hex_colors, colors = hex_colors)
     plt.savefig(analyzed_image)
     print(hex_colors)
+    files = [f for f in pathlib.Path().glob(output_colors)]
+    if len(files) > 0:
+        os.remove(output_colors)
+        write_to_output_colors(hex_colors)
+    else:
+        write_to_output_colors(hex_colors)
 
 def image_analysis():
     modified_image = prep_image(image)
     color_analysis(modified_image)
+
+def write_to_output_colors(colors):
+    f = open(output_colors, 'a')
+    for hex in colors:
+        f.write(hex + '\n')
+    f.close()
+
+def build_dictionary(variables_file):
+    return
