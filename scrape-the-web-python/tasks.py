@@ -20,12 +20,13 @@ variables_file = "devdata/variables.txt"
 def open_web_and_screenshot():
     open_the_web()
     image_analysis()
+    build_dictionary(keys=keys(),vals=vals())
     
 
 def open_the_web():
     browser.goto(site_name)
     page = browser.page()
-    page.screenshot(path=output_image,full_page=True, scale="css")
+    page.screenshot(path=output_image,full_page=True, scale="css",omit_background=False)
     
     
     #https://towardsdatascience.com/building-an-image-color-analyzer-using-python-12de6b0acf74
@@ -55,9 +56,8 @@ def color_analysis(img):
     ordered_colors = [center_colors[i] for i in counts.keys()]
     hex_colors = [rgb_to_hex(ordered_colors[i]) for i in counts.keys()]
     plt.figure(figsize = (12, 8))
-    plt.pie(counts.values(), labels = hex_colors, colors = hex_colors)
+    plt.pie(sorted(counts.values()), labels = hex_colors, colors = hex_colors)
     plt.savefig(analyzed_image)
-    print(hex_colors)
     files = [f for f in pathlib.Path().glob(output_colors)]
     if len(files) > 0:
         os.remove(output_colors)
@@ -75,5 +75,18 @@ def write_to_output_colors(colors):
         f.write(hex + '\n')
     f.close()
 
-def build_dictionary(variables_file):
-    return
+def keys():
+    f = open(variables_file,'r')
+    keys = []
+    for i in f:
+        keys.append(i)
+    return keys
+def vals():
+    f = open(output_colors,'r')
+    vals = []
+    for i in f:
+        vals.append(i)
+    return vals
+def build_dictionary(keys,vals):
+    cols = dict(map(lambda i,j : (i,j) , keys,vals))
+    print(cols)
