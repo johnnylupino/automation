@@ -9,18 +9,23 @@ import numpy as np
 import cv2
 import pathlib
 import os
+import shutil
+import json
 
 site_name = "http://www.kermeet.pl"
 output_image = "output/screenshot.png"
 analyzed_image = "output/color_analysis_report.png"
 output_colors = "output/output_colors.txt"
 variables_file = "devdata/variables.txt"
+theme_config_json =  "devdata/theme-config.json"
+theme_config_json_updated = "output/theme-config-updated.json"
 
 @task
 def open_web_and_screenshot():
     open_the_web()
     image_analysis()
-    build_dictionary(keys=keys(),vals=vals())
+    f = build_dictionary(keys=keys(),vals=vals())
+    find_in_json_and_replace(colors_dictionary=f)
     
 
 def open_the_web():
@@ -79,14 +84,31 @@ def keys():
     f = open(variables_file,'r')
     keys = []
     for i in f:
-        keys.append(i)
+        keys.append(i.strip('\n'))
     return keys
 def vals():
     f = open(output_colors,'r')
     vals = []
     for i in f:
-        vals.append(i)
+        vals.append(i.strip('\n'))
     return vals
 def build_dictionary(keys,vals):
     cols = dict(map(lambda i,j : (i,j) , keys,vals))
-    print(cols)
+    #print(cols)
+    return cols
+
+def find_in_json_and_replace(colors_dictionary):
+    """gets theme-config.json, finds color variables and matches them again cols dictionary
+    from build_dictionary function"""
+    shutil.copy2(theme_config_json, theme_config_json_updated)
+    #find keys in updated json that match colors_dictionary - another function
+    search_variables(colors_dictionary.keys())
+    for k in colors_dictionary:
+        print('key:',k, 'value:', colors_dictionary[k])
+
+def search_variables(keys):
+    f = open(theme_config_json_updated, 'r')
+    d = json.load(f)
+    for i in d['colors']:
+        #returns dict!
+        print(i)
