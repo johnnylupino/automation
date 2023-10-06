@@ -114,7 +114,6 @@ def search_variables(colors_dictionary):
         json.dump(d, updated_file)
         f.close()
     print(updated_file)
-    #above does not work as expected
 
 
 
