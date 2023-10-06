@@ -101,14 +101,20 @@ def find_in_json_and_replace(colors_dictionary):
     """gets theme-config.json, finds color variables and matches them again cols dictionary
     from build_dictionary function"""
     shutil.copy2(theme_config_json, theme_config_json_updated)
-    #find keys in updated json that match colors_dictionary - another function
-    search_variables(colors_dictionary.keys())
-    for k in colors_dictionary:
-        print('key:',k, 'value:', colors_dictionary[k])
+    search_variables(colors_dictionary)
 
-def search_variables(keys):
-    f = open(theme_config_json_updated, 'r')
+
+def search_variables(colors_dictionary):
+    f = open(theme_config_json, 'r')
     d = json.load(f)
-    for i in d['colors']:
-        #returns dict!
-        print(i)
+    json_dict = d['colors'][0]
+    json_dict.update(colors_dictionary)
+    print(json_dict)
+    with open(theme_config_json_updated,'w') as updated_file:
+        json.dump(d, updated_file)
+        f.close()
+    print(updated_file)
+    #above does not work as expected
+
+
+
