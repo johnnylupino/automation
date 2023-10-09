@@ -77,7 +77,7 @@ def image_analysis():
 def write_to_output_colors(colors):
     f = open(output_colors, 'a')
     for hex in colors:
-        f.write(hex + '\n')
+        f.write(hex + ';' + '\n')
     f.close()
 
 def keys():
@@ -116,4 +116,4 @@ def search_variables(colors_dictionary):
     print(updated_file)
 
 
-
+#for hex need a function to choose from the lightest to darkest
