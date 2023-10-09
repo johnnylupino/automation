@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation       Basic Boost configuration using data provided in a template
 
-Library             RPA.Browser.Selenium    auto_close=${FALSE}
+Library             RPA.Browser.Selenium    auto_close=${False}
 Library             RPA.Robocorp.Vault
 Library             RPA.Tables
 Library             RPA.Desktop
@@ -15,7 +15,7 @@ Library             RPA.FileSystem
 ${OUTPUT_FILE}          preset.scss
 ${base-url}             http://localhost:8000
 ${theme-name}           Boost
-${theme-config}         devdata/theme-config.json
+${theme-config}         devdata/theme-config-updated.json    #devdata/theme-config.json
 ${site-name}            $.sitename
 ${site-summary}         $.description[*].summary
 ${colors}               $.colors[*]
@@ -50,7 +50,7 @@ Process json
 
 *** Keywords ***
 Open login form
-    Open Available Browser    url=http://localhost:8000/login/index.php
+    Open Available Browser     url=http://localhost:8000/login/index.php 
 
 Log In
     ${secret} =    Get Secret    mdl_admin
@@ -124,6 +124,7 @@ Process preset file
     Go To    ${base-url}/admin/settings.php?section=themesettingboost#theme_boost_general
 
 Upload preset file
+    Set Browser Implicit Wait    5 seconds
     ${file-uploader} =    Click Element When Visible    css:div.filemanager-toolbar a[title="Add..."]
     Wait Until Element Is Visible    css:input[type="file"]    timeout=45.0
     Choose File    css:input[type="file"]    ${OUTPUT_DIR}${/}${OUTPUT_FILE}
@@ -145,6 +146,3 @@ Set brand color
      Log     ${json-file}
      &{brand} =    Get value from JSON    ${json-file}     ${brand_color}
      Log    ${brand}
-     #Input Text    s_theme_boost_brandcolor    ${brand}
-     #Click Button When Visible    //button[text()='Save changes']
-     #Reload Page
