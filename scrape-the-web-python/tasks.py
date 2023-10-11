@@ -13,13 +13,15 @@ import shutil
 import json
 
 site_name = "http://www.kermeet.pl"
-output_image = "output/screenshot.png"
+output_image = "screenshot.png"
 analyzed_image = "output/color_analysis_report.png"
 output_colors = "output/output_colors.txt"
 variables_file = "devdata/variables.txt"
 theme_config_json =  "devdata/theme-config.json"
 theme_config_json_updated = "output/theme-config-updated.json"
 
+current_dir = os.getcwd()
+path_to_screenshot = os.path.join(current_dir,"output")
 @task
 def open_web_and_screenshot():
     open_the_web()
@@ -31,11 +33,11 @@ def open_web_and_screenshot():
 def open_the_web():
     browser.goto(site_name)
     page = browser.page()
-    page.screenshot(path=output_image,full_page=True, scale="css",omit_background=False)
-    
+    page.screenshot(path=os.path.join(path_to_screenshot,output_image),full_page=True, scale="css",omit_background=False)
     
     #https://towardsdatascience.com/building-an-image-color-analyzer-using-python-12de6b0acf74
-if output_image:
+if os.path.join(path_to_screenshot,output_image):
+    os.chdir(path_to_screenshot)
     image = cv2.imread(output_image)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 else:
@@ -116,4 +118,4 @@ def search_variables(colors_dictionary):
     print(updated_file)
 
 
-#for hex need a function to choose from the lightest to darkest
+#for hex need a function to choose from the lightest to
