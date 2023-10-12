@@ -13,7 +13,7 @@ import shutil
 import json
 
 site_name = "http://www.kermeet.pl"
-output_image = "screenshot.png"
+output_image = "screenshot2.png"
 analyzed_image = "color_analysis_report.png"
 output_colors = "output_colors.txt"
 variables_file = "variables.txt"
@@ -38,8 +38,10 @@ def open_the_web():
     
     #https://towardsdatascience.com/building-an-image-color-analyzer-using-python-12de6b0acf74
 if os.path.join(path_to_screenshot,output_image):
-    os.chdir(path_to_screenshot)
-    image = cv2.imread(output_image)
+    #os.chdir(path_to_screenshot)
+    image = os.path.join(path_to_screenshot,output_image)
+        #image = r"/Users/robot/git/automation/scrape-the-web-python/output/screenshot2.png"
+    image = cv2.imread(image)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 else:
     print("no screenshot found")
