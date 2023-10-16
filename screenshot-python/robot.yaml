@@ -2,8 +2,10 @@
 # https://github.com/robocorp/rcc/blob/master/docs/recipes.md#what-is-in-robotyaml
 
 tasks:
-  Minimal Task:
-    shell: python -m robocorp.tasks run tasks.py
+  ReadImage:
+    shell: python -m robocorp.tasks run ReadImage.py
+  GetColors:
+    shell: python -m robocorp.tasks run GetColors.py
 
 environmentConfigs:
   - environment_windows_amd64_freeze.yaml
