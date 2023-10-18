@@ -12,13 +12,17 @@ import os
 import shutil
 import json
 
+site_name = "http://www.kermeet.pl"
+theme_config_json =  "theme-config.json"
+theme_config_json_updated = "theme-config-updated.json"
 @task
 def open_the_web(): 
-    browser.goto("http://www.kermeet.pl")
+    browser.goto(site_name)
     page = browser.page()
     page.screenshot(path="screenhshot-with-path.png",full_page=True,scale="css")
     read_image()
     color_analysis()
+
 
 def read_image(): 
     image = "screenhshot-with-path.png"  
@@ -46,7 +50,8 @@ def color_analysis():
     plt.figure(figsize = (12, 8))
     plt.pie(sorted(counts.values()), labels = hex_colors, colors = hex_colors)
     plt.savefig("analyzed_image.png")
-    build_dictionary(keys=keys(),vals=hex_colors)
+    colors = build_dictionary(keys=keys(),vals=hex_colors)
+    process_json(colors_dictionary=colors)
 
 def keys():
     f = open("variables.txt",'r')
@@ -58,3 +63,15 @@ def keys():
 def build_dictionary(keys,vals):
     cols = dict(map(lambda i,j : (i,j) , keys,vals))
     return cols
+
+def process_json(colors_dictionary):
+    shutil.copy2(theme_config_json, theme_config_json_updated)
+    f = open(theme_config_json, 'r')
+    d = json.load(f)
+    json_dict = d['colors'][0]
+    json_dict.update(colors_dictionary)
+    print(json_dict)
+    with open(theme_config_json_updated,'w') as updated_file:
+        json.dump(d, updated_file)
+        f.close()
+    print(json.dump(updated_file))
