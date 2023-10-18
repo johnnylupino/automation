@@ -28,7 +28,7 @@ def keys():
         keys.append(i.strip('\n'))
     return keys
 def vals():
-    f = open("hex_colors.txt",'r')
+    f = open("output/hex_colors.txt",'r')
     vals = []
     for i in f:
         vals.append(i.strip('\n'))

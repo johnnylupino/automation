@@ -1,5 +1,0 @@
-#b5a48f;
-#fe9d00;
-#565a44;
-#e6dccb;
-#fdfdfd;
