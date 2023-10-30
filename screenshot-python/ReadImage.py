@@ -24,7 +24,8 @@ def open_the_web():
     page.screenshot(path="screenhshot-with-path.png",full_page=True,scale="css")
     read_image()
     color_analysis()
-    workitems.outputs.create([{ "payload": {"test": "get"}}])
+    #workitems will work in rcc
+    #workitems.outputs.create([{ "payload": {"test": "get"}}])
 
 def read_image(): 
     image = "screenhshot-with-path.png" 
@@ -49,11 +50,16 @@ def color_analysis():
     counts = Counter(color_labels)
     ordered_colors = [center_colors[i] for i in counts.keys()]
     hex_colors = [rgb_to_hex(ordered_colors[i]) for i in counts.keys()]
+    f = open("hex colors.txt", "a")
+    for i in hex_colors: 
+        f.writelines(i+"\n")
+    f.close()
     plt.figure(figsize = (12, 8))
     plt.pie(sorted(counts.values()), labels = hex_colors, colors = hex_colors)
     plt.savefig("analyzed_image.png")
     colors = build_dictionary(keys=keys(),vals=hex_colors)
     process_json(colors_dictionary=colors)
+
 
 def keys():
     f = open("variables.txt",'r')
@@ -75,6 +81,5 @@ def process_json(colors_dictionary):
     with open(theme_config_json_updated,'w') as updated_file:
         json.dump(d, updated_file)
         f.close()
-#no need for json here pass colors dict to workitem and rest in the robot task
 
     
