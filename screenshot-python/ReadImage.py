@@ -1,5 +1,7 @@
 from robocorp.tasks import task
 from robocorp import browser
+from robocorp import workitems
+from robocorp.tasks import task
 
 from collections import Counter
 from sklearn.cluster import KMeans
@@ -22,10 +24,10 @@ def open_the_web():
     page.screenshot(path="screenhshot-with-path.png",full_page=True,scale="css")
     read_image()
     color_analysis()
-
+    workitems.outputs.create([{ "payload": {"test": "get"}}])
 
 def read_image(): 
-    image = "screenhshot-with-path.png"  
+    image = "screenhshot-with-path.png" 
     image = cv2.imread(image)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     modified_img = image.reshape(image.shape[0]*image.shape[1], 3)
@@ -70,8 +72,9 @@ def process_json(colors_dictionary):
     d = json.load(f)
     json_dict = d['colors'][0]
     json_dict.update(colors_dictionary)
-    print(json_dict)
     with open(theme_config_json_updated,'w') as updated_file:
         json.dump(d, updated_file)
         f.close()
-    print(json.dump(updated_file))
+#no need for json here pass colors dict to workitem and rest in the robot task
+
+    
