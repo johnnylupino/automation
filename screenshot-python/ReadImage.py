@@ -1,7 +1,7 @@
 from robocorp.tasks import task
 from robocorp import browser
 from robocorp import workitems
-from robocorp.tasks import task
+
 
 from collections import Counter
 from sklearn.cluster import KMeans
@@ -50,7 +50,7 @@ def color_analysis():
     counts = Counter(color_labels)
     ordered_colors = [center_colors[i] for i in counts.keys()]
     hex_colors = [rgb_to_hex(ordered_colors[i]) for i in counts.keys()]
-    f = open("hex colors.txt", "a")
+    f = open("hex_colors.txt", "a")
     for i in hex_colors: 
         f.writelines(i+"\n")
     f.close()

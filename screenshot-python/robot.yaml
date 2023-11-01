@@ -6,7 +6,8 @@ tasks:
     shell: python -m robocorp.tasks run ReadImage.py
   CreatePreset:
     shell: python -m robot --report NONE --outputdir output --logtitle "Task log" CreatePreset.robot
-
+  UseOpenAI:
+    shell: python -m robocorp.tasks run UseOpenAI.py
 
 environmentConfigs:
   - environment_windows_amd64_freeze.yaml
