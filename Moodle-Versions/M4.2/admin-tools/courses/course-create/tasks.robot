@@ -4,6 +4,8 @@ Documentation       Robot to create a Moodle course without resources and activi
 Library             RPA.Browser.Playwright
 Library             RPA.HTTP
 Library             RPA.Robocorp.Vault
+Library             RPA.Assistant         
+Library    RPA.MSGraph
 
 *** Variables ***
 ${base_url}            http://localhost:8000
@@ -31,7 +33,17 @@ Check default format
     Go To    ${base_url}/admin/settings.php?section=coursesettings
     ${format_selector} =    Get Element    id=id_s_moodlecourse_format
     @{get_selected} =     Get Selected Options    ${format_selector}    label    ==    Topics format
+    Confirmation dialog    @{get_selected}
+Confirmation dialog
+    [Arguments]    @{get_selected}
+    Add heading   Happy to use @{get_selected} as default course format?
+    Add submit buttons    buttons=No,Yes    default=Yes
+    ${result}=    Run dialog
+    #IF   $result.submit == "Yes"
+    #    Delete user    ${username}
+    #END 
 
+   
 
 
 
