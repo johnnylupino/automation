@@ -60,13 +60,8 @@ Navigate to course management page
     Find course ID by name
 
 Find course ID by name
-    Wait For Elements State    id=category-listing-title    timeout=5
-    ${course_link} =     Get Element    xpath=//a[contains(.,${fullname_txt})] 
-    
-    
-    
-    
-    
+    ${course_link} =     Get Element    xpath=//a[contains(@class, 'coursename') and text()='${fullname_txt}']
+
     
     
     
