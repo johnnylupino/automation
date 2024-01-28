@@ -5,7 +5,7 @@ Library             RPA.Browser.Playwright
 Library             RPA.HTTP
 Library             RPA.Robocorp.Vault
 Library             RPA.Assistant         
-Library    RPA.MSGraph
+Library             RPA.Tables
 
 *** Variables ***
 ${base_url}            http://localhost:8000
@@ -16,12 +16,16 @@ ${fullname_txt}        Test
 ${shortname_sel}       id_shortname
 ${shortname_txt}       Test
 ${course_save}         id_saveandreturn
+${course_formats_list}     /admin/settings.php?section=manageformats
+${FORMATS_TABLE_LOCATOR}    xpath=//table[contains(@class, 'manageformattable')]
+${TD_LOCATOR}    cell.c0
 
 *** Tasks ***
 Create a course
     Open login form
     Log In
-    Check default format
+    #Check default format
+    Find available and enabled course formats
 
 
 *** Keywords ***
@@ -58,21 +62,20 @@ Navigate to course management page
     Fill Text    id=${shortname_sel}    ${shortname_txt}
     Click    id=${course_save}
     Find course ID by name
+    Find available and enabled course formats
 
 Find course ID by name
     ${course_link} =     Get Element    xpath=//a[contains(@class, 'coursename') and text()='${fullname_txt}']
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-   
-
-
-
-
+Find available and enabled course formats
+    Go To    ${base_url}${course_formats_list}      
+    ${table}=    Set Variable    xpath=//table[contains(\@class, 'manageformattable')]
+    ${e}=    Get Table Cell Element    ${table}    0  1   
+    @{rows}=    Get Elements    ${FORMATS_TABLE_LOCATOR}
+    FOR    ${row}    IN    @{rows}
+        ${cells}=    Get Elements   ${row} >> td.cell.c0
+        FOR    ${cell}    IN    @{cells}
+        ${cell_text}=    Get Text    ${cell}
+        Log    ${cell_text}
+        END
+    END
