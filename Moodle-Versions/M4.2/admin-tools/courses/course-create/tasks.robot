@@ -5,7 +5,7 @@ Library             RPA.Browser.Playwright
 Library             RPA.HTTP
 Library             RPA.Robocorp.Vault
 Library             RPA.Assistant         
-Library             RPA.Tables
+Library             Collections
 
 *** Variables ***
 ${base_url}            http://localhost:8000
@@ -18,7 +18,8 @@ ${shortname_txt}       Test
 ${course_save}         id_saveandreturn
 ${course_formats_list}     /admin/settings.php?section=manageformats
 ${FORMATS_TABLE_LOCATOR}    xpath=//table[contains(@class, 'manageformattable')]
-${TD_LOCATOR}    cell.c0
+${TD_LOCATOR}    td.cell.c0
+@{avail_course_formats}
 
 *** Tasks ***
 Create a course
@@ -72,10 +73,12 @@ Find available and enabled course formats
     ${table}=    Set Variable    xpath=//table[contains(\@class, 'manageformattable')]
     ${e}=    Get Table Cell Element    ${table}    0  1   
     @{rows}=    Get Elements    ${FORMATS_TABLE_LOCATOR}
+
     FOR    ${row}    IN    @{rows}
-        ${cells}=    Get Elements   ${row} >> td.cell.c0
+        ${cells}=    Get Elements   ${row} >> ${TD_LOCATOR}
         FOR    ${cell}    IN    @{cells}
         ${cell_text}=    Get Text    ${cell}
-        Log    ${cell_text}
+        Append To List    ${avail_course_formats}    ${cell_text}
         END
     END
+    LOG    ${avail_course_formats}
