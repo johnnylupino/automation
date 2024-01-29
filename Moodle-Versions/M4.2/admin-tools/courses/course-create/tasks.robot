@@ -20,6 +20,7 @@ ${course_formats_list}     /admin/settings.php?section=manageformats
 ${FORMATS_TABLE_LOCATOR}    xpath=//table[contains(@class, 'manageformattable')]
 ${TD_LOCATOR}    td.cell.c0
 @{avail_course_formats}
+@{avail_activities_resources}    assign    label    quiz
 
 *** Tasks ***
 Create a course
@@ -91,8 +92,22 @@ Confirmation dialog2
     Add Radio Buttons
     ...    name=new_course_format
     ...    options=${avail_course_formats}
+    Add Text    Ensure selected format is enabled on the site
     Add submit buttons    buttons=Cancel,Submit    default=Submit
      ${result} =    Run dialog
-    #IF   $result.submit == "Submit"
-     #   Select activities and resources to add to a new course
-    #END 
+    IF   $result.submit == "Submit"
+        Select activities and resources    @{avail_activities_resources}
+    END 
+
+Select activities and resources
+    [Arguments]    @{avail_activities_resources}
+    Add heading   Enable activity/resource  size=Small
+    FOR    ${element}    IN    @{avail_activities_resources}
+        Add checkbox    name=${element}      label=${element}
+    END
+    Add Text    This automation task will create empty activities/resources
+    Add submit buttons    buttons=Cancel,Submit    default=Submit
+     ${result} =    Run dialog
+         #IF    $result.vault
+    #    Enable vault
+    #END
