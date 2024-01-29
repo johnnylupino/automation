@@ -25,8 +25,8 @@ ${TD_LOCATOR}    td.cell.c0
 Create a course
     Open login form
     Log In
-    #Check default format
-    Find available and enabled course formats
+    Check default format
+    #Find available and enabled course formats
 
 
 *** Keywords ***
@@ -55,6 +55,8 @@ Confirmation dialog
     ${result} =    Run dialog
     IF   $result.submit == "Yes"
         Navigate to course management page
+    ELSE
+        Find available and enabled course formats
     END 
 Navigate to course management page
     Go To    ${base_url}${course_categories}?${category_id}
@@ -81,4 +83,16 @@ Find available and enabled course formats
         Append To List    ${avail_course_formats}    ${cell_text}
         END
     END
-    LOG    ${avail_course_formats}
+    Confirmation dialog2    ${avail_course_formats}
+
+Confirmation dialog2
+    [Arguments]    ${avail_course_formats}
+    Add heading   Select course formats  size=Small
+    Add Radio Buttons
+    ...    name=new_course_format
+    ...    options=${avail_course_formats}
+    Add submit buttons    buttons=Cancel,Submit    default=Submit
+     ${result} =    Run dialog
+    #IF   $result.submit == "Submit"
+     #   Select activities and resources to add to a new course
+    #END 
