@@ -1,5 +1,5 @@
-#565a44
-#e6dccb
-#fdfdfd
-#b5a48f
-#fe9d00
+#0d0950
+#d42328
+#85858e
+#f9f9fa
+#f2bc3d

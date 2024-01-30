@@ -14,7 +14,7 @@ import os
 import shutil
 import json
 
-site_name = "http://www.kermeet.pl"
+site_name = "https://www.athenscollege.edu.gr/en"
 theme_config_json =  "theme-config.json"
 theme_config_json_updated = "theme-config-updated.json"
 @task

@@ -11,9 +11,6 @@ def my_entry_point():
     # Set the OpenAI key
     openai.api_key = openai_key
 
-    # Now you can use the OpenAI API
-    #response = openai.Completion.create(engine="text-davinci-002", prompt="Translate the following English text to French: '{}'", max_tokens=60)
-    #print(response.choices[0].text.strip())
 
     try:
     # Attempt to open and read the file
@@ -41,3 +38,18 @@ def sort_hex(text):
 
     # The response will contain the answer to your question
     print(response['choices'][0]['message']['content'])
+    colors = response['choices'][0]['message']['content']
+    get_ai_output_into_lines(colors)
+
+def get_ai_output_into_lines(colors):
+    import re
+
+    text = colors
+    pattern = r'^\d+\.\s*(.*?)$'
+    matches = re.findall(pattern, text, flags=re.MULTILINE)
+
+    # Output the matched lines
+    with open('hex_colors_sorted.txt', 'w') as file:
+        for match in matches:
+            file.writelines(match + "\n")
+    file.close()
