@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.10.12 on darwin)" generated="20240201 21:42:44.518" rpa="true" schemaversion="4">
+<suite id="s1" name="AddSCSS" source="/Users/robot/git/automation/screenshot-python/AddSCSS.robot">
+<test id="s1-t1" name="Login and check selected theme" line="12">
+<kw name="Open Available Browser" library="RPA.Browser.Selenium">
+<doc>Attempts to open a browser on the user's device from a set of
+supported browsers. Automatically downloads a corresponding webdriver
+if none is already installed.</doc>
+<msg timestamp="20240201 21:42:46.089" level="INFO">Downloaded webdriver to: /Users/robot/.robocorp/webdrivers/.wdm/drivers/chromedriver/mac64/121.0.6167.85/chromedriver-mac-x64/chromedriver</msg>
+<msg timestamp="20240201 21:42:49.663" level="INFO">Webdriver version taken into use: ChromeDriver 121.0.6167.85 (3f98d690ad7e59242ef110144c757b2ac4eef1a2-refs/branch-heads/6167@{#1539})
+</msg>
+<msg timestamp="20240201 21:42:49.850" level="INFO">Targeted browser version: 121.0.6167</msg>
+<msg timestamp="20240201 21:42:49.851" level="INFO">Creating an instance of the Chrome WebDriver.</msg>
+<msg timestamp="20240201 21:42:55.826" level="INFO">Created Chrome browser with arguments: --disable-dev-shm-usage --disable-web-security --allow-running-insecure-content --no-sandbox</msg>
+<msg timestamp="20240201 21:42:55.827" level="INFO" html="true">&lt;p&gt;Attempted combinations:&lt;/p&gt;&lt;div class="doc"&gt;&lt;table&gt;&lt;tr&gt;&lt;th&gt;Browser&lt;/th&gt;&lt;th&gt;Download&lt;/th&gt;&lt;th&gt;Error&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Chrome&lt;/td&gt;&lt;td&gt;False&lt;/td&gt;&lt;td&gt;Message: Webdriver executable 'chromedriver' is not in PATH (with disabled Selenium Manager)
+&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;Chrome&lt;/td&gt;&lt;td&gt;True&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</msg>
+<status status="PASS" starttime="20240201 21:42:45.468" endtime="20240201 21:42:55.827"/>
+</kw>
+<kw name="Open login form">
+<kw name="Go To" library="RPA.Browser.Selenium">
+<arg>${base_url}/login/index.php</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20240201 21:42:55.830" level="INFO">Opening url 'http://localhost:8000/login/index.php'</msg>
+<status status="PASS" starttime="20240201 21:42:55.829" endtime="20240201 21:43:03.229"/>
+</kw>
+<kw name="Get Secret" library="RPA.Robocorp.Vault">
+<var>${secret}</var>
+<arg>mdl_admin</arg>
+<doc>Read a secret from the configured source, e.g. Robocorp Vault,
+and return it as a ``Secret`` object.</doc>
+<msg timestamp="20240201 21:43:03.230" level="INFO">Protecting keyword: RPA.Robocorp.Vault.Get Secret</msg>
+<msg timestamp="20240201 21:43:03.234" level="INFO">Log level changed from NONE to INFO.</msg>
+<status status="PASS" starttime="20240201 21:43:03.230" endtime="20240201 21:43:03.233"/>
+</kw>
+<kw name="Input Text" library="RPA.Browser.Selenium">
+<arg>css=input\#username</arg>
+<arg>${secret}[username]</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20240201 21:43:03.237" level="INFO">Typing text 'admin' into text field 'css=input#username'.</msg>
+<status status="PASS" starttime="20240201 21:43:03.235" endtime="20240201 21:43:04.833"/>
+</kw>
+<kw name="Input Text" library="RPA.Browser.Selenium">
+<arg>css=input\#password</arg>
+<arg>${secret}[password]</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<msg timestamp="20240201 21:43:04.835" level="INFO">Typing text 'admin!' into text field 'css=input#password'.</msg>
+<status status="PASS" starttime="20240201 21:43:04.834" endtime="20240201 21:43:05.721"/>
+</kw>
+<kw name="Submit Form" library="RPA.Browser.Selenium">
+<doc>Submits a form identified by ``locator``.</doc>
+<msg timestamp="20240201 21:43:05.721" level="INFO">Submitting form 'None'.</msg>
+<status status="PASS" starttime="20240201 21:43:05.721" endtime="20240201 21:43:14.991"/>
+</kw>
+<status status="PASS" starttime="20240201 21:42:55.828" endtime="20240201 21:43:14.992"/>
+</kw>
+<kw name="Check selected theme">
+<kw name="Go To" library="RPA.Browser.Selenium">
+<arg>${base_url}${appearance}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<msg timestamp="20240201 21:43:14.993" level="INFO">Opening url 'http://localhost:8000/theme/index.php'</msg>
+<status status="PASS" starttime="20240201 21:43:14.993" endtime="20240201 21:43:21.282"/>
+</kw>
+<kw name="Get Text" library="RPA.Browser.Selenium">
+<var>${selected_value}</var>
+<arg>xpath=//table/tbody/tr[1]/td[2]</arg>
+<doc>Returns the text value of the element identified by ``locator``.</doc>
+<msg timestamp="20240201 21:43:21.729" level="INFO">${selected_value} = Boost</msg>
+<status status="PASS" starttime="20240201 21:43:21.283" endtime="20240201 21:43:21.729"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>Selected value is: ${selected_value}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20240201 21:43:21.730" level="INFO">Selected value is: Boost</msg>
+<status status="PASS" starttime="20240201 21:43:21.729" endtime="20240201 21:43:21.730"/>
+</kw>
+<kw name="Close Browser" library="RPA.Browser.Selenium" type="TEARDOWN">
+<doc>Closes the current browser.</doc>
+<status status="PASS" starttime="20240201 21:43:21.730" endtime="20240201 21:43:21.822"/>
+</kw>
+<status status="PASS" starttime="20240201 21:43:14.992" endtime="20240201 21:43:21.822"/>
+</kw>
+<status status="PASS" starttime="20240201 21:42:45.467" endtime="20240201 21:43:21.823"/>
+</test>
+<status status="PASS" starttime="20240201 21:42:44.525" endtime="20240201 21:43:21.826"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tasks</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="AddSCSS">AddSCSS</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
