@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "/Users/robot/git/automation/html2pdf/html2pdf/."
+    ]
+}
